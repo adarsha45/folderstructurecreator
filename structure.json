@@ -1,0 +1,16 @@
+{
+  "src": {
+    "classes": [
+      "filename.cls",
+      "filename.cls-meta.xml"
+    ],
+    "aura": {
+      "Foldername": [
+        "filename.cmp",
+        "filename.cmp-meta.xml",
+        "filenameController.js",
+        "filenameHelper.js"
+      ]
+    }
+  }
+}
