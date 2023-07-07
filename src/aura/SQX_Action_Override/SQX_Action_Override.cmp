@@ -1,0 +1,52 @@
+<aura:component controller="SQX_Controller_Action_Override" implements="lightning:actionOverride,lightning:hasPageReference,force:hasSObjectName,force:hasRecordId,lightning:isUrlAddressable" extends="SQX_Lightning_Base_Component" access="global">
+
+    <aura:attribute name="recordId" type="String" access="global"/>
+    <aura:attribute name="pageReference" type="SObject"/>
+    <aura:attribute name="sObjectName" type="String" access="global" />
+    <aura:attribute name="recordTypeId" type="String"/>
+    <aura:attribute name="component" type="Map" default="{}" description="The list of components that must be rendered dynamically" />
+    <aura:attribute name="additionalParam" type="Map" default="{}" description="additional params to create and load the component, if required" access="global"/>
+    <aura:attribute name="errorMsgOnComponentNotFound" type="String" />
+
+    <aura:attribute name="nextAction" type="String"/>
+    <aura:attribute name="purposeOfSig" type="String"/>
+    <aura:attribute name="isConsole" type="Boolean" default="false" description="true if the app is console app"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.refresh}"/>
+
+    <aura:handler name="dynamicComponentForRedirection" event="c:SQX_Dynamic_Component_Event" action="{!c.handleRedirect}"/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+    <!-- pageReferenceUtil component -->
+    <lightning:pageReferenceUtils aura:id="pageRefUtils"/>
+
+    <aura:method name="saveRecordDetail" action="{!c.saveRecord}" description="Method to save cqform detail record" access="global"/>
+
+    <aura:if isTrue="{!v.errorMsg != null &amp;&amp; v.errorMsg.length > 0}">
+        <div class="slds-notify slds-notify_toast slds-theme_error" style="width: 96.5%">
+            <div class="slds-notify__content">
+                <h2 class="slds-text-heading_small ">{!v.errorMsg}</h2>
+            </div>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!not(empty(v.component))}">
+        <!-- create and render the component from Action Override Custom metadata Dynamically -->
+        <c:SQX_Dynamic_Component 
+                aura:id="dynamicComponent" 
+                componentname="{!v.component.compliancequest__Override_Component_Name__c}" 
+                namespace="{!v.component.compliancequest__Override_Component_Namespace__c}" 
+                recordId="{!v.recordId}"
+                additionalParam="{!v.additionalParam}"
+                displayErrorMsg="{!v.errorMsgOnComponentNotFound}"/>
+    </aura:if>
+
+    <aura:if isTrue="{!not(empty(v.nextAction))}">
+        <div class="cq-hideSection">
+            <c:SQX_Lightning_Esig esigPurpose="{!v.purposeOfSig}" objType="{!v.recordId}" purposeActions="{!v.nextAction}" aura:id="esigComponent">
+            </c:SQX_Lightning_Esig>
+        </div>
+    </aura:if>
+
+</aura:component>

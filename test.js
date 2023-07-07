@@ -4,14 +4,14 @@ const jsonFilePath = 'structure.json'
 const jsonContent = fs.readFileSync(jsonFilePath,'utf8');
 const structure = JSON.parse(jsonContent)
 
-const fileToCreate = 'aura'; // --filetocreate
+const componentToCreate = 'aura'; // --componentToCreate
 const filename = 'ada'; // --filename
 
 let fileType;
-if(structure.src.hasOwnProperty(fileToCreate)){
-    fileType = fileToCreate
+if(structure.src.hasOwnProperty(componentToCreate)){
+    fileType = componentToCreate
 } else {
-    console.log(`Invalid file type: ${fileToCreate}`)
+    console.log(`Invalid file type: ${componentToCreate}`)
     process.exit(1);
 }
 

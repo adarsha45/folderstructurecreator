@@ -1,19 +1,53 @@
 const fs = require('fs');
 const path = require('path');
-
 const jsonFilePath = 'structure.json';
 const jsonContent = fs.readFileSync(jsonFilePath, 'utf8');
 const structure = JSON.parse(jsonContent);
+const filePath = 'output.txt';
+//-------------------------filetype doesnot suppert
+fs.readFile(filePath, 'utf16le', (err, data) => {
+  if (err) {
+    console.error('Error reading file:', err);
+    return;
+  }
+  const lines = data.split('\n');
+  const contents = []
+  lines.forEach((line) => {
+    console.log(line)
+    const a = line.split('/')
+    console.log(a)
+    contents.push(a)
+});
+console.log(contents)
+//contents.splice(-1)
+  contents.forEach((content)=>{
+    console.log(content)
+    var fname = content[2]
+    console.log(fname)
+    if (fname.includes('.')) {
+      fname = fname.split('.')[0];
+      console.log(fname); 
+    } else {
+      fname = fname
+    }
+    console.log(fname)
 
-const fileToCreate = process.argv[2];//'aura'; // --filetocreate
-const filename = process.argv[3];//'ada'; // --filename
-
-let fileType;
-if (structure.src.hasOwnProperty(fileToCreate)) {
-  fileType = fileToCreate;
+    // const tName = fname.split('.')
+    let componentName = content[1]
+    console.log(componentName)
+    let textName = fname
+    createFolderStructure(componentName,textName)
+    console.log(textName)
+  })
+});
+//-------------------------------------------------------------------------------------------------------------------folderstructure---------------------
+const createFolderStructure = ((componentToCreate,filename)=>{
+  let fileType;
+if (structure.src.hasOwnProperty(componentToCreate)) {
+  fileType = componentToCreate;
 } else {
-  console.log(`Invalid file type: ${fileToCreate}`);
-  process.exit(1);
+  console.log(`Invalid file type: ${componentToCreate}`);
+  //process.exit(1);
 }
 
 const baseFolder = path.join(__dirname, 'src');
@@ -22,7 +56,6 @@ if (!fs.existsSync(baseFolder)) {
   fs.mkdirSync(baseFolder);
   console.log(`Created folder: ${baseFolder}`);
 }
-
 if (fileType === 'classes') {
   const targetFolder = path.join(baseFolder, fileType);
 
@@ -54,3 +87,34 @@ if (fileType === 'classes') {
     console.log(`Created file: ${filePath}`);
   });
 }
+
+})
+//----------------------------------------------------comparefunction --------------still cannot export 
+
+
+function copyContent(sourceDir,destinationDir) {
+  const files = fs.readdirSync(destinationDir);
+
+  files.forEach(file => {
+    console.log(file)
+    const sourcePath = path.join(sourceDir, file);
+    const destinationPath = path.join(destinationDir, file);
+
+    const isFile = fs.statSync(destinationPath).isFile();
+
+    if (isFile) {
+      const content = fs.readFileSync(sourcePath, 'utf8');
+
+      fs.writeFileSync(destinationPath, content);
+    } else {
+      fs.mkdirSync(destinationPath, { recursive: true });
+      copyContent(sourcePath, destinationPath);
+    }
+  });
+}
+const folderA = 'srce';
+const folderB = 'src';
+
+setTimeout(copyContent, 5000, folderA,folderB); // 
+//Call the greet() function with the argument 'John' after a delay of 2000 milliseconds (2 seconds) cause due to async it is running at omega n-
+//call the content class but works  after n-- 
