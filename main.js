@@ -22,7 +22,7 @@ console.log(contents)
 //contents.splice(-1)
   contents.forEach((content)=>{
     console.log(content)
-    var fname = content[2]
+    var fname = content[2]    // src/layout/filename.xml
     console.log(fname)
     if (fname.includes('.')) {
       fname = fname.split('.')[0];
@@ -40,6 +40,8 @@ console.log(contents)
     console.log(textName)
   })
 });
+
+
 //-------------------------------------------------------------------------------------------------------------------folderstructure---------------------
 const createFolderStructure = ((componentToCreate,filename)=>{
   let fileType;
@@ -68,8 +70,9 @@ if (fileType === 'classes') {
     const filePath = path.join(targetFolder, file.replace('filename', filename));
     fs.writeFileSync(filePath, '', 'utf8');
     console.log(`Created file: ${filePath}`);
-  });
-} else if (fileType === 'aura') {
+  });  
+} 
+else if (fileType === 'aura') {
   const targetFolder = path.join(baseFolder, fileType, filename);
 
   if (!fs.existsSync(path.join(baseFolder, fileType))) {
